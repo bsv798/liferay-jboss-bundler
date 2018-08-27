@@ -170,7 +170,7 @@ LIFERAY_OSGI_ARCHIVE_PATH=$TEMP_PATH/liferay-osgi.zip
 LIFERAY_DEPENDENCIES_DOWNLOAD_URL="`echo "$LIFERAY_BASE_URL" | sed "s/!!!/-dependencies/"`.zip"
 LIFERAY_DEPENDENCIES_ARCHIVE_PATH=$TEMP_PATH/liferay-dependencies.zip
 LIFERAY_WAR_DOWNLOAD_URL="`echo "$LIFERAY_BASE_URL" | sed "s/!!!//"`.war"
-LIFERAY_WAR_ARCHIVE_PATH=$TEMP_PATH/liferay-dependencies.war
+LIFERAY_WAR_ARCHIVE_PATH=$TEMP_PATH/liferay-portal.war
 
 LIFERAY_HOME=$TEMP_PATH/liferay
 
