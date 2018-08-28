@@ -6,7 +6,7 @@ TEMP_PATH="$SCRIPT_DIR/t m p"
 source "$SCRIPT_DIR/bin/ljb.conf"
 
 LIFERAY_SHORT_VERSION=`echo "$LIFERAY_FULL_VERSION" | sed "s/\(.*\)-.*./\1/"`
-LIFERAY_BASE_URL="https://sourceforge.net/projects/lportal/files/Liferay Portal/`echo "$LIFERAY_SHORT_VERSION" | sed "s/\(.*\)/\U\1/" | sed "s/\-/\ /"`/$LIFERAY_PREFIX!!!-$LIFERAY_FULL_VERSION"
+LIFERAY_BASE_URL="$LIFERAY_BASE_URL/$LIFERAY_PREFIX!!!-$LIFERAY_FULL_VERSION"
 LIFERAY_OSGI_DOWNLOAD_URL="`echo "$LIFERAY_BASE_URL" | sed "s/!!!/-osgi/"`.zip"
 LIFERAY_OSGI_ARCHIVE_PATH=$TEMP_PATH/liferay-osgi.zip
 LIFERAY_DEPENDENCIES_DOWNLOAD_URL="`echo "$LIFERAY_BASE_URL" | sed "s/!!!/-dependencies/"`.zip"
