@@ -1,6 +1,6 @@
 #!/bin/sh
 
-source "$SCRIPT_DIR/bin/ljb-setup-conf.sh"
+. "$SCRIPT_DIR/bin/ljb-setup-conf.sh"
 
 setup_portal_properties() {
 	cat > "$LIFERAY_HOME/osgi/configs/com.liferay.portal.search.elasticsearch.configuration.ElasticsearchConfiguration.cfg" << EOF

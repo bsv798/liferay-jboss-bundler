@@ -2,7 +2,7 @@
 
 TEMP_PATH="$SCRIPT_DIR/t m p"
 
-source "$SCRIPT_DIR/bin/ljb.conf"
+. "$SCRIPT_DIR/bin/ljb.conf"
 
 LIFERAY_SHORT_VERSION=`echo "$LIFERAY_FULL_VERSION" | sed "s/\(.*\)-.*./\1/"`
 LIFERAY_BASE_URL="$LIFERAY_BASE_URL/$LIFERAY_PREFIX!!!-$LIFERAY_FULL_VERSION"
@@ -26,9 +26,9 @@ JDBC_DRIVER_NAME=`basename -- "$JDBC_DRIVER_DOWNLOAD_URL"`
 JDBC_DRIVER_PATH=$TEMP_PATH/$JDBC_DRIVER_NAME
 
 download_file() {
-	local NAME=$1
+	local NAME="$1"
 	local URL=`echo "$2" | sed "s/\ /%20/g"`
-	local OUTPUT=$3
+	local OUTPUT="$3"
 
 	if [ -f "$OUTPUT" ]
 	then
@@ -36,7 +36,7 @@ download_file() {
 	else
 		echo "Downloading $NAME from $URL"
 
-		if command -v curl &> /dev/null
+		if command -v curl > /dev/null 2>&1
 		then
 			curl --silent --location --create-dirs --output "$OUTPUT" "$URL"
 		else
@@ -46,7 +46,7 @@ download_file() {
 }
 
 append_to_cli() {
-	local TEXT=$1
+	local TEXT="$1"
 
 	if [ ! -f "$APPSERVER_SETUP_CLI_PATH" ]
 	then

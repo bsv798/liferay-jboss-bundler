@@ -1,6 +1,6 @@
 #!/bin/sh
 
-source "$SCRIPT_DIR/bin/ljb-setup-conf.sh"
+. "$SCRIPT_DIR/bin/ljb-setup-conf.sh"
 
 setup_app_server() {
 	append_to_cli "/subsystem=elytron/key-store=server_key_store:add(path=\"$JKS_FILE_PATH\", credential-reference={clear-text=\"$JKS_STORE_PASSWORD\"}, type=JKS)"

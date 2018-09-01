@@ -1,6 +1,6 @@
 #!/bin/sh
 
-source "$SCRIPT_DIR/bin/ljb-setup-conf.sh"
+. "$SCRIPT_DIR/bin/ljb-setup-conf.sh"
 
 download_files() {
 	download_file "JDBC Driver" "$JDBC_DRIVER_DOWNLOAD_URL" "$JDBC_DRIVER_PATH"

@@ -1,6 +1,6 @@
 #!/bin/sh
 
-source "$SCRIPT_DIR/bin/ljb-setup-conf.sh"
+. "$SCRIPT_DIR/bin/ljb-setup-conf.sh"
 
 download_files() {
 	download_file "Liferay OSGi $LIFERAY_FULL_VERSION" "$LIFERAY_OSGI_DOWNLOAD_URL" "$LIFERAY_OSGI_ARCHIVE_PATH"

@@ -1,10 +1,10 @@
 #!/bin/sh
 
-source "$SCRIPT_DIR/bin/ljb-setup-conf.sh"
+. "$SCRIPT_DIR/bin/ljb-setup-conf.sh"
 
 setup_app_server() {
-	local DEP_PATH=`echo "$LIFERAY_HOME/dependencies" | sed "s/\ /\\\\\ /g"`
-	local FILES=`ls "$LIFERAY_HOME/dependencies"`
+	local DEP_PATH="`echo "$LIFERAY_HOME/dependencies" | sed "s/\ /\\\\\ /g"`"
+	local FILES="`ls "$LIFERAY_HOME/dependencies" 2> /dev/null`"
 	local FILE_STRING=
 
 	for FILE in $FILES
@@ -23,8 +23,8 @@ setup_app_server() {
 }
 
 clean_temporary_resources() {
-	rm -rf "$LIFERAY_HOME/dependencies" 2> /dev/null
-	rm "$APPSERVER_SETUP_CLI_PATH" 2> /dev/null
+	rm -rf "$LIFERAY_HOME/dependencies" > /dev/null 2>&1
+	rm -f "$APPSERVER_SETUP_CLI_PATH" > /dev/null 2>&1
 }
 
 setup_app_server
