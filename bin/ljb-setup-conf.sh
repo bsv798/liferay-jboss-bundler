@@ -35,7 +35,13 @@ download_file() {
 		echo "Using previously downloaded file $OUTPUT"
 	else
 		echo "Downloading $NAME from $URL"
-		curl --silent --location --create-dirs --output "$OUTPUT" "$URL"
+
+		if command -v curl &> /dev/null
+		then
+			curl --silent --location --create-dirs --output "$OUTPUT" "$URL"
+		else
+			wget --quiet --force-directories --output-document "$OUTPUT" "$URL"
+		fi
 	fi
 }
 
