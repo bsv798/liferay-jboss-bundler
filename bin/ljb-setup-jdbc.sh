@@ -1,8 +1,6 @@
 #!/bin/sh
 
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
-
-source "$SCRIPT_DIR/ljb-setup-conf.sh"
+source "$SCRIPT_DIR/bin/ljb-setup-conf.sh"
 
 download_files() {
 	download_file "JDBC Driver" "$JDBC_DRIVER_DOWNLOAD_URL" "$JDBC_DRIVER_PATH"

@@ -1,6 +1,5 @@
 #!/bin/sh
 
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." >/dev/null && pwd )"
 TEMP_PATH="$SCRIPT_DIR/t m p"
 
 source "$SCRIPT_DIR/bin/ljb.conf"

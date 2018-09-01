@@ -1,11 +1,9 @@
 #!/bin/sh
 
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
-
-source "$SCRIPT_DIR/ljb-setup-conf.sh"
+source "$SCRIPT_DIR/bin/ljb-setup-conf.sh"
 
 download_files() {
-	download_file "${APPSERVER_TYPE^} $APPSERVER_VERSION" "$APPSERVER_DOWNLOAD_URL" "$APPSERVER_ARCHIVE_PATH"
+	download_file "$APPSERVER_NAME $APPSERVER_VERSION" "$APPSERVER_DOWNLOAD_URL" "$APPSERVER_ARCHIVE_PATH"
 }
 
 extract_files() {
@@ -14,7 +12,9 @@ extract_files() {
 
 if [ "x$APPSERVER_TYPE" != "x" ] && [ "x$APPSERVER_VERSION" != "x" ] && [ "x$APPSERVER_DOWNLOAD_URL" != "x" ]
 then
-	echo "Setup ${APPSERVER_TYPE^}"
+	APPSERVER_NAME=`echo ${APPSERVER_TYPE:0:1} | tr  '[a-z]' '[A-Z]'`${APPSERVER_TYPE:1}
+
+	echo "Setup $APPSERVER_NAME"
 	
 	download_files
 	extract_files

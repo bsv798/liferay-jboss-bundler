@@ -1,8 +1,6 @@
 #!/bin/sh
 
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
-
-source "$SCRIPT_DIR/ljb-setup-conf.sh"
+source "$SCRIPT_DIR/bin/ljb-setup-conf.sh"
 
 setup_portal_properties() {
 	cat > "$LIFERAY_HOME/osgi/configs/com.liferay.portal.search.elasticsearch.configuration.ElasticsearchConfiguration.cfg" << EOF

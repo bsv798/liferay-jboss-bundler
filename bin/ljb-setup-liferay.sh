@@ -1,8 +1,6 @@
 #!/bin/sh
 
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
-
-source "$SCRIPT_DIR/ljb-setup-conf.sh"
+source "$SCRIPT_DIR/bin/ljb-setup-conf.sh"
 
 download_files() {
 	download_file "Liferay OSGi $LIFERAY_FULL_VERSION" "$LIFERAY_OSGI_DOWNLOAD_URL" "$LIFERAY_OSGI_ARCHIVE_PATH"
@@ -19,6 +17,7 @@ extract_files() {
 	unzip -q "$LIFERAY_OSGI_ARCHIVE_PATH" -d "$LIFERAY_HOME"
 	mv "$LIFERAY_HOME/$LIFERAY_PREFIX-osgi-$LIFERAY_SHORT_VERSION" "$LIFERAY_HOME/osgi"
 
+	mkdir -p "$APPSERVER_DEPLOYMENTS_PATH/ROOT.war"
 	unzip -q "$LIFERAY_WAR_ARCHIVE_PATH" -d "$APPSERVER_DEPLOYMENTS_PATH/ROOT.war"
 	touch "$APPSERVER_DEPLOYMENTS_PATH/ROOT.war.dodeploy"
 }

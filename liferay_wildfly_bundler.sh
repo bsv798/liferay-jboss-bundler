@@ -1,6 +1,6 @@
 #!/bin/sh
 
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
+export SCRIPT_DIR="$( cd "$( dirname "$0" )" > /dev/null && pwd )"
 
 sh "$SCRIPT_DIR/bin/ljb-setup-start.sh"
 sh "$SCRIPT_DIR/bin/ljb-setup-appserver.sh"
