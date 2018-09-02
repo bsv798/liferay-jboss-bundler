@@ -2,7 +2,10 @@
 
 TEMP_PATH="$SCRIPT_DIR/t m p"
 
-. "$SCRIPT_DIR/bin/ljb.conf"
+if [ -f "$SCRIPT_DIR/bin/ljb.conf" ]
+then
+	. "$SCRIPT_DIR/bin/ljb.conf"
+fi
 
 LIFERAY_SHORT_VERSION=`echo "$LIFERAY_FULL_VERSION" | sed "s/\(.*\)-.*./\1/"`
 LIFERAY_BASE_URL="$LIFERAY_BASE_URL/$LIFERAY_PREFIX!!!-$LIFERAY_FULL_VERSION"
