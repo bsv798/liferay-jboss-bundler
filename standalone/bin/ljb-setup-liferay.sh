@@ -71,20 +71,6 @@ liferay.home=$LIFERAY_HOME
 setup.wizard.add.sample.data=off
 setup.wizard.enabled=false
 EOF
-
-	if grep -q "jdbc.default.jndi.name=java:comp/env/jdbc/ds_$JDBC_DRIVER_NAME" "$LIFERAY_HOME/portal-ext.properties" 2> /dev/null
-	then
-		local VAR="\
-\t<resource-ref>\n\
-\t\t<res-ref-name>java:comp/env/jdbc/ds_$JDBC_DRIVER_NAME</res-ref-name>\n\
-\t\t<res-type>javax.sql.DataSource</res-type>\n\
-\t\t<res-auth>Container</res-auth>\n\
-\t\t<lookup-name>java:/datasources/ds_$JDBC_DRIVER_NAME</lookup-name>\n\
-\t</resource-ref>\n\
-</web-app>"
-
-		sed -i "s,</web-app>,$VAR," "$APPSERVER_DEPLOYMENTS_PATH/ROOT.war/WEB-INF/web.xml"
-	fi
 }
 
 if [ "x$LIFERAY_PREFIX" != "x" ] && [ "x$LIFERAY_FULL_VERSION" != "x" ]
