@@ -73,7 +73,7 @@ EOF
 }
 
 setup_portal_properties() {
-	cat > "$LIFERAY_HOME/portal-setup-wizard.properties" << EOF
+	cat > "$APPSERVER_HOME_PATH/../portal-setup-wizard.properties" << EOF
 admin.email.from.address=test@liferay.com
 admin.email.from.name=Test Test
 company.default.locale=en_US
