@@ -4,6 +4,9 @@
 
 if [ "x$LIFERAY_HOME" != "x" ]
 then
-	rm -rf "$LIFERAY_HOME"
+	if [ "$1" == "true" ]
+	then
+		rm -rf "$LIFERAY_HOME"
+	fi
 	mkdir -p "$LIFERAY_HOME"
 fi
