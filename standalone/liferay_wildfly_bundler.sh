@@ -6,6 +6,7 @@ sh "$SCRIPT_DIR/bin/ljb-setup-start.sh" true
 sh "$SCRIPT_DIR/bin/ljb-setup-appserver.sh"
 sh "$SCRIPT_DIR/bin/ljb-setup-jdbc-driver.sh"
 sh "$SCRIPT_DIR/bin/ljb-setup-liferay.sh"
+sh "$SCRIPT_DIR/bin/ljb-setup-liferay-deployment.sh"
 sh "$SCRIPT_DIR/bin/ljb-setup-finish.sh"
 
 sh "$SCRIPT_DIR/bin/ljb-setup-start.sh"
