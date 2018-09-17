@@ -4,7 +4,7 @@
 
 if [ "x$APPSERVER_HOME_PATH" != "x" ]
 then
-	if [ "$1" == "true" ]
+	if [ "x$1" = "xtrue" ]
 	then
 		rm -rf "$APPSERVER_HOME_PATH"
 	fi
@@ -13,7 +13,7 @@ fi
 
 if [ "x$LIFERAY_HOME" != "x" ]
 then
-	if [ "$1" == "true" ]
+	if [ "x$1" = "xtrue" ]
 	then
 		rm -rf "$LIFERAY_HOME"
 	fi
