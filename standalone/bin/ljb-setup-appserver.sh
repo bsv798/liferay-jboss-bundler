@@ -13,7 +13,7 @@ extract_files() {
 	rm -rf "$APPSERVER_HOME_PATH/$APPSERVER_TYPE-$APPSERVER_VERSION"
 }
 
-if [ "x$APPSERVER_TYPE" != "x" ] && [ "x$APPSERVER_VERSION" != "x" ] && [ "x$APPSERVER_DOWNLOAD_URL" != "x" ]
+if [ "x$APPSERVER_TYPE" != "x" ] && [ "x$APPSERVER_VERSION" != "x" ]
 then
 	APPSERVER_NAME="$(echo "$APPSERVER_TYPE" | sed 's/.*/\u&/')"
 
