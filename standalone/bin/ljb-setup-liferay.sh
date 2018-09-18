@@ -43,6 +43,7 @@ setup_app_server() {
 	append_to_cli "/system-property=org.apache.catalina.connector.USE_BODY_ENCODING_FOR_QUERY_STRING:add(value=true)"
 
 	append_to_cli "/subsystem=deployment-scanner/scanner=default:write-attribute(name=deployment-timeout, value=600)"
+	append_to_cli "/system-property=jboss.as.management.blocking.timeout:add(value=600)"
 
 	append_to_cli "/subsystem=security/security-domain=PortalRealm/:add()"
 	append_to_cli "/subsystem=security/security-domain=PortalRealm/authentication=classic:add(login-modules=[{code=com.liferay.portal.security.jaas.PortalLoginModule, flag=required}])"
