@@ -74,7 +74,7 @@ EOF
 }
 
 setup_portal_properties() {
-	cat > "$APPSERVER_HOME_PATH/../portal-setup-wizard.properties" << EOF
+	cat > "$LIFERAY_HOME/portal-setup-wizard.properties" << EOF
 admin.email.from.address=test@liferay.com
 admin.email.from.name=Test Test
 company.default.locale=en_US
@@ -83,6 +83,11 @@ default.admin.email.address.prefix=test
 liferay.home=$LIFERAY_HOME
 setup.wizard.add.sample.data=off
 setup.wizard.enabled=false
+EOF
+
+	cat > "$APPSERVER_DEPLOYMENTS_PATH/ROOT.war/WEB-INF/classes/portal-ext.properties" << EOF
+include-and-override=$LIFERAY_HOME/portal-ext.properties
+include-and-override=$LIFERAY_HOME/portal-setup-wizard.properties
 EOF
 }
 

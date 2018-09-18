@@ -6,7 +6,7 @@ setup_portal_properties() {
 	cat > "$LIFERAY_HOME/osgi/configs/com.liferay.portal.bundle.blacklist.internal.BundleBlacklistConfiguration.config" << EOF
 blacklistBundleSymbolicNames=["com.liferay.portal.cache.single","com.liferay.portal.cluster.single","com.liferay.portal.scheduler.single"]
 EOF
-	echo "cluster.link.enabled=true" >> "$APPSERVER_HOME_PATH/../portal-ext.properties"
+	echo "cluster.link.enabled=true" >> "$LIFERAY_HOME/portal-ext.properties"
 }
 
 copy_files() {
