@@ -23,6 +23,9 @@ JDBC_DRIVER_USERNAME="${JDBC_DRIVER_USERNAME:-postgres}"
 JDBC_DRIVER_PASSWORD="${JDBC_DRIVER_PASSWORD:-postgres}"
 JDBC_CREDENTIAL_STORE_PASSWORD="${JDBC_CREDENTIAL_STORE_PASSWORD:-cs_pass}"
 
+PROMETHEUS_DOWNLOAD_URL="${PROMETHEUS_DOWNLOAD_URL:-http://central.maven.org/maven2/io/prometheus/jmx/jmx_prometheus_javaagent/0.3.1/jmx_prometheus_javaagent-0.3.1.jar}"
+PROMETHEUS_COPY_CONFIG_PATH="${PROMETHEUS_COPY_CONFIG_PATH:-$TEMP_PATH/prometheus/config.yaml}"
+
 JKS_FILE_PATH="${JKS_FILE_PATH:-$SCRIPT_DIR/server.keystore}"
 JKS_STORE_PASSWORD="${JKS_STORE_PASSWORD:-change_store_pass}"
 JKS_KEY_PASSWORD="${JKS_KEY_PASSWORD:-change_key_pass}"

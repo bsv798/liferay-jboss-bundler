@@ -8,6 +8,7 @@ sh "$SCRIPT_DIR/bin/ljb-setup-jdbc-driver.sh"
 sh "$SCRIPT_DIR/bin/ljb-setup-liferay.sh"
 sh "$SCRIPT_DIR/bin/ljb-setup-liferay-cluster.sh"
 sh "$SCRIPT_DIR/bin/ljb-setup-liferay-deployment.sh"
+sh "$SCRIPT_DIR/bin/ljb-setup-prometheus.sh"
 sh "$SCRIPT_DIR/bin/ljb-setup-finish.sh"
 
 sh "$SCRIPT_DIR/bin/ljb-setup-start.sh"
