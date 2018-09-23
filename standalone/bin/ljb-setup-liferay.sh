@@ -91,6 +91,19 @@ include-and-override=$LIFERAY_HOME/portal-setup-wizard.properties
 EOF
 }
 
+update_checksum() {
+	local KEY
+	local VALUE
+
+	for i in $(echo "$LIFERAY_PACKAGE_CHECKSUM" | sed "s/,/ /g")
+	do
+		KEY=`echo $i | cut -f1 -d =`
+		VALUE=`echo $i | cut -f2 -d =`
+
+		sed -i "s,$KEY=.*,$KEY=$VALUE," "$LIFERAY_HOME/osgi/target-platform/integrity.properties"
+	done
+}
+
 if [ "x$LIFERAY_PREFIX" != "x" ] && [ "x$LIFERAY_FULL_VERSION" != "x" ]
 then
 	echo "Setup Liferay"
@@ -99,4 +112,5 @@ then
 	extract_files
 	setup_app_server
 	setup_portal_properties
+	update_checksum
 fi
