@@ -104,6 +104,21 @@ update_checksum() {
 	done
 }
 
+turn_off_logging() {
+	if [ "x$LIFERAY_TURN_OFF_LOGGING" = "xtrue" ]
+	then
+		local EXTRACT_PATH="$APPSERVER_DEPLOYMENTS_PATH/ROOT.war/WEB-INF/classes/META-INF"
+		local SOURCE_FILE="portal-log4j.xml"
+		local DESTINATION_FILE="portal-log4j-ext.xml"
+
+		unzip -q -j "$APPSERVER_DEPLOYMENTS_PATH/ROOT.war/WEB-INF/lib/portal-impl.jar" "META-INF/$SOURCE_FILE" -d "$EXTRACT_PATH"
+		mv "$EXTRACT_PATH/$SOURCE_FILE" "$EXTRACT_PATH/$DESTINATION_FILE"
+
+		sed -i "s,.*<appender-ref ref=\"XML_FILE\" />,," "$EXTRACT_PATH/$DESTINATION_FILE"
+		sed -i "s,.*<appender-ref ref=\"TEXT_FILE\" />,," "$EXTRACT_PATH/$DESTINATION_FILE"
+	fi
+}
+
 if [ "x$LIFERAY_PREFIX" != "x" ] && [ "x$LIFERAY_FULL_VERSION" != "x" ]
 then
 	echo "Setup Liferay"
@@ -113,4 +128,5 @@ then
 	setup_app_server
 	setup_portal_properties
 	update_checksum
+	turn_off_logging
 fi
