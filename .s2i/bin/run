@@ -1,3 +1,5 @@
 #!/bin/bash
 
-"../../standalone/prepare.sh" && "$APPSERVER_HOME_PATH/bin/standalone.sh" "-b" "0.0.0.0" $*
+DST="$HOME/bundler"
+
+"$DST/setup.sh" && "$APPSERVER_HOME_PATH/bin/standalone.sh" "-b" "0.0.0.0" $*

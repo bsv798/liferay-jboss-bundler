@@ -1,3 +1,12 @@
 #!/bin/bash
 
-sh "../../standalone/build.sh"
+SRC="/tmp/src"
+STD="$SRC/standalone"
+DST="$HOME/bundler"
+
+mkdir "$DST"
+cp -r "$STD"/* "$DST"/
+
+sh "$STD/build.sh"
+
+rm -rf "$SRC"
