@@ -2,8 +2,8 @@
 
 mkdir bundler > /dev/null 2>&1
 
-cp -u ../../standalone/liferay_wildfly_bundler.sh bundler
-cp -u -r ../../standalone/bin bundler
+cp -u ../standalone/liferay_wildfly_bundler.sh bundler
+cp -u -r ../standalone/bin bundler
 
 docker build --build-arg APPSERVER_TYPE="wildfly" \
              --build-arg APPSERVER_VERSION="13.0.0.Final" \
