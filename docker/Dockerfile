@@ -150,10 +150,10 @@ ENV JKS_KEY_PASSWORD="${JKS_KEY_PASSWORD}"
 ENV ELASTIC_TRANSPORT_ADDRESSES="${ELASTIC_TRANSPORT_ADDRESSES}"
 ENV ELASTIC_CLUSTER_NAME="${ELASTIC_CLUSTER_NAME}"
 
-COPY --from=builder --chown=liferay:liferay "$LIFERAY_HOME" "$LIFERAY_HOME"
-COPY --from=builder --chown=liferay:liferay "$APPSERVER_HOME_PATH" "$APPSERVER_HOME_PATH"
-COPY --from=builder --chown=liferay:liferay "$SCRIPT_DIR/bin" "$SCRIPT_DIR/bin"
-COPY --chown=liferay:liferay "prepare.sh" "$SCRIPT_DIR"
+COPY --from=builder "$LIFERAY_HOME" "$LIFERAY_HOME"
+COPY --from=builder "$APPSERVER_HOME_PATH" "$APPSERVER_HOME_PATH"
+COPY --from=builder "$SCRIPT_DIR/bin" "$SCRIPT_DIR/bin"
+COPY "prepare.sh" "$SCRIPT_DIR"
 
 EXPOSE 8080
 EXPOSE 8443
