@@ -150,11 +150,6 @@ ENV JKS_KEY_PASSWORD="${JKS_KEY_PASSWORD}"
 ENV ELASTIC_TRANSPORT_ADDRESSES="${ELASTIC_TRANSPORT_ADDRESSES}"
 ENV ELASTIC_CLUSTER_NAME="${ELASTIC_CLUSTER_NAME}"
 
-RUN addgroup -S liferay
-RUN adduser -S -H liferay liferay
-
-USER liferay:liferay
-
 COPY --from=builder --chown=liferay:liferay "$LIFERAY_HOME" "$LIFERAY_HOME"
 COPY --from=builder --chown=liferay:liferay "$APPSERVER_HOME_PATH" "$APPSERVER_HOME_PATH"
 COPY --from=builder --chown=liferay:liferay "$SCRIPT_DIR/bin" "$SCRIPT_DIR/bin"
