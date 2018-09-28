@@ -1,4 +1,4 @@
-FROM openjdk:8-jdk AS builder
+FROM openshift/openjdk18-openshift AS builder
 
 ARG SCRIPT_DIR="/bundler"
 
@@ -57,7 +57,7 @@ RUN "$SCRIPT_DIR/bin/ljb-setup-finish.sh"
 
 
 
-FROM openjdk:8-jdk-alpine
+FROM openshift/openjdk18-openshift
 
 ARG DEBUG="false"
 
