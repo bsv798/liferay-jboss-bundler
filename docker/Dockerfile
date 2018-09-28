@@ -1,5 +1,7 @@
 FROM 172.30.1.1:5000/openshift/openjdk18-openshift AS builder
 
+USER 0
+
 ARG SCRIPT_DIR="/bundler"
 
 COPY "bundler" "$SCRIPT_DIR"
@@ -17,6 +19,8 @@ RUN "$SCRIPT_DIR/bin/ljb-setup-finish.sh"
 
 
 FROM 172.30.1.1:5000/openshift/openjdk18-openshift
+
+USER 0
 
 ARG DEBUG="false"
 
