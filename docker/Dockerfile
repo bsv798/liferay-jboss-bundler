@@ -161,7 +161,4 @@ EXPOSE 11311
 EXPOSE 9779
 EXPOSE 8787
 
-HEALTHCHECK --start-period=5m --interval=5m --timeout=10s --retries=6 \
-        CMD curl -f -s -k -o /dev/null https://localhost:8443/ || exit 1
-
 ENTRYPOINT "$SCRIPT_DIR/prepare.sh" && "$APPSERVER_HOME_PATH/bin/standalone.sh" "-b" "0.0.0.0"
