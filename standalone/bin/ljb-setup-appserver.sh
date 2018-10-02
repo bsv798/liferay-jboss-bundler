@@ -13,6 +13,13 @@ extract_files() {
 	rm -rf "$APPSERVER_HOME_PATH/$APPSERVER_TYPE-$APPSERVER_VERSION"
 }
 
+turn_off_logging() {
+	if [ "x$APPSERVER_TURN_OFF_LOGGING" = "xtrue" ]
+	then
+		append_to_cli "/subsystem=logging/root-logger=ROOT:remove-handler(name=FILE)"
+	fi
+}
+
 if [ "x$APPSERVER_TYPE" != "x" ] && [ "x$APPSERVER_VERSION" != "x" ]
 then
 	APPSERVER_NAME="$(echo "$APPSERVER_TYPE" | sed 's/.*/\u&/')"
@@ -21,4 +28,5 @@ then
 	
 	download_files
 	extract_files
+	turn_off_logging
 fi
