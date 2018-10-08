@@ -56,8 +56,17 @@ grant {
 };
 EOF
 
+	local MEM_LINE_NUMBER=`grep -n 'PRESERVE_JAVA_OPTS' "$APPSERVER_BIN_PATH/standalone.conf" | cut -d: -f 1`
+	local MEM_TEXT="\
+LIFERAY_MIN_MEMORY=\\\"\\\${LIFERAY_MIN_MEMORY:-2048m}\\\"\n\
+LIFERAY_MAX_MEMORY=\\\"\\\${LIFERAY_MAX_MEMORY:-4096m}\\\"\n\
+LIFERAY_MIN_METASPACE=\\\"\\\${LIFERAY_MIN_METASPACE:-384m}\\\"\n\
+LIFERAY_MAX_METASPACE=\\\"\\\${LIFERAY_MAX_METASPACE:-768m}\\\"\n"
+
+	sed -i "`expr ${MEM_LINE_NUMBER} + 1`a$MEM_TEXT" "$APPSERVER_BIN_PATH/standalone.conf"
+
 	local VAR1="-Xms[0-9]*[mM] -Xmx[0-9]*[mM] -XX:MetaspaceSize=[0-9]*[mM] -XX:MaxMetaspaceSize=[0-9]*[mM]"
-	local VAR2="-Xmx4096m -XX:MaxMetaspaceSize=768m -XX:MetaspaceSize=384m"
+	local VAR2="-Xms\$LIFERAY_MIN_MEMORY -Xmx\$LIFERAY_MAX_MEMORY -XX:MaxMetaspaceSize=\$LIFERAY_MAX_METASPACE -XX:MetaspaceSize=\$LIFERAY_MIN_METASPACE"
 
 	sed -i "s,$VAR1,$VAR2," "$APPSERVER_BIN_PATH/standalone.conf"
 
