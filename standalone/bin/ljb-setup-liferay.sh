@@ -123,8 +123,11 @@ if [ "x$LIFERAY_PREFIX" != "x" ] && [ "x$LIFERAY_FULL_VERSION" != "x" ]
 then
 	echo "Setup Liferay"
 
-	download_files
-	extract_files
+	if [ "x$LIFERAY_BASE_URL" != "x" ]
+	then
+		download_files
+		extract_files
+	fi
 	setup_app_server
 	setup_portal_properties
 	update_checksum

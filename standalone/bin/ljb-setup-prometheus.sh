@@ -6,9 +6,12 @@ download_files() {
 	download_file "Prometheus JMX Exporter" "$PROMETHEUS_DOWNLOAD_URL" "$PROMETHEUS_COPY_LIBRARY_PATH"
 }
 
-copy_files() {
+extract_files() {
 	mkdir -p "$PROMETHEUS_PATH"
 	cp "$PROMETHEUS_COPY_LIBRARY_PATH" "$PROMETHEUS_LIBRARY_PATH"
+}
+
+copy_files() {
 	cp "$PROMETHEUS_COPY_CONFIG_PATH" "$PROMETHEUS_CONFIG_PATH"
 }
 
@@ -32,11 +35,15 @@ JAVA_OPTS="\
 EOF
 }
 
-if [ "x$PROMETHEUS_DOWNLOAD_URL" != "x" ] && [ "x$PROMETHEUS_COPY_CONFIG_PATH" != "x" ]
+if [ "x$PROMETHEUS_COPY_CONFIG_PATH" != "x" ]
 then
 	echo "Setup Prometheus JMX exporter"
 
-	download_files
+	if [ "x$PROMETHEUS_DOWNLOAD_URL" != "x" ]
+	then
+		download_files
+		extract_files
+	fi
 	copy_files
 	setup_app_server
 fi

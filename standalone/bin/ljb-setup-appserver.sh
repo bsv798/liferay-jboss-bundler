@@ -26,7 +26,10 @@ then
 
 	echo "Setup $APPSERVER_NAME"
 	
-	download_files
-	extract_files
+	if [ "x$APPSERVER_DOWNLOAD_URL" != "x" ]
+	then
+		download_files
+		extract_files
+	fi
 	turn_off_logging
 fi

@@ -17,11 +17,14 @@ setup_app_server() {
 	append_to_cli "/subsystem=elytron/credential-store=jdbc_credential_store:add(location=\"$APPSERVER_BIN_PATH/credential_store/jdbc_credential_store.jceks\", credential-reference={clear-text=\"$JDBC_CREDENTIAL_STORE_PASSWORD\"}, create=true)"
 }
 
-if [ "x$JDBC_DRIVER_DOWNLOAD_URL" != "x" ] && [ "x$JDBC_CREDENTIAL_STORE_PASSWORD" != "x" ]
+if [ "x$JDBC_CREDENTIAL_STORE_PASSWORD" != "x" ]
 then
 	echo "Setup JDBC driver"
 
-	download_files
-	extract_files
+	if [ "x$JDBC_DRIVER_DOWNLOAD_URL" != "x" ]
+	then
+		download_files
+		extract_files
+	fi
 	setup_app_server
 fi
