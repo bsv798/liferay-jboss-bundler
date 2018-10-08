@@ -16,7 +16,7 @@ setup_app_server() {
 }
 
 setup_portal_properties() {
-	echo "mail.session.jndi.name=$MAIL_JNDI_NAME" >> "$LIFERAY_HOME/portal-ext.properties"
+	echo "mail.session.jndi.name=$MAIL_JNDI_NAME" >> "$LIFERAY_HOME/portal-ext-bundle.properties"
 }
 
 if [ "x$MAIL_HOST" != "x" ] && [ "x$MAIL_PORT" != "x" ]

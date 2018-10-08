@@ -9,7 +9,7 @@ setup_app_server() {
 }
 
 setup_portal_properties() {
-	echo "jdbc.default.jndi.name=java:comp/env/jdbc/ds_$JDBC_DRIVER_NAME" >> "$LIFERAY_HOME/portal-ext.properties"
+	echo "jdbc.default.jndi.name=java:comp/env/jdbc/ds_$JDBC_DRIVER_NAME" >> "$LIFERAY_HOME/portal-ext-bundle.properties"
 
 	local VAR="\
 \t<resource-ref>\n\

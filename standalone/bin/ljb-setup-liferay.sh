@@ -95,9 +95,12 @@ setup.wizard.enabled=false
 EOF
 
 	cat > "$APPSERVER_DEPLOYMENTS_PATH/ROOT.war/WEB-INF/classes/portal-ext.properties" << EOF
+include-and-override=$LIFERAY_HOME/portal-ext-bundle.properties
 include-and-override=$LIFERAY_HOME/portal-ext.properties
 include-and-override=$LIFERAY_HOME/portal-setup-wizard.properties
 EOF
+
+	touch "$LIFERAY_HOME/portal-ext.properties"
 }
 
 update_checksum() {
