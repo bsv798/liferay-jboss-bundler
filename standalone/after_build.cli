@@ -1,0 +1,4 @@
+embed-server
+batch
+/system-property=after.build:add(value=true)
+run-batch
