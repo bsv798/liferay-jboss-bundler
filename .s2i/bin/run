@@ -1,0 +1,5 @@
+#!/bin/bash
+
+DST="$HOME/bundler"
+
+"$DST/prepare.sh" && "$DST/run.sh" "$@"

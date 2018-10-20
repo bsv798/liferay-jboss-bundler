@@ -1,0 +1,152 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: elasticsearch
+parameters:
+- name: APP_NAME
+  required: true
+  value: elasticsearch
+- name: ELASTIC_VERSION
+  value: "6.4.2"
+- name: ELASTIC_SOURCE_REPO
+  value: https://github.com/bsv798/liferay-jboss-bundler
+- name: ELASTIC_SOURCE_REF
+  value: bbb
+- name: ELASTIC_SOURCE_CONTEXT_DIR
+  value: openshift/elastic
+objects:
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    labels:
+      app: ${APP_NAME}
+    name: ${APP_NAME}
+  spec:
+    lookupPolicy:
+      local: false
+    tags:
+    - from:
+        kind: DockerImage
+        name: ${APP_NAME}:latest
+      name: latest
+- apiVersion: v1
+  kind: BuildConfig
+  metadata:
+    labels:
+      app: ${APP_NAME}
+    name: ${APP_NAME}
+  spec:
+    resources:
+      limits:
+        memory: 512Mi
+        cpu: 500m
+      requests:
+        memory: 256Mi
+        cpu: 200m
+    source:
+      contextDir: ${ELASTIC_SOURCE_CONTEXT_DIR}
+      git:
+        ref: ${ELASTIC_SOURCE_REF}
+        uri: ${ELASTIC_SOURCE_REPO}
+      type: Git
+    output:
+      to:
+        kind: ImageStreamTag
+        name: ${APP_NAME}:latest
+    strategy:
+      dockerStrategy:
+        env:
+        - name: ELASTIC_VERSION
+          value: ${ELASTIC_VERSION}
+        - name: ELASTIC_HOME
+          value: /opt/elasticsearch
+        from:
+          kind: ImageStreamTag
+          name: openjdk18-openshift:latest
+          namespace: openshift
+      type: docker
+    triggers:
+    - type: ConfigChange
+    - imageChange: {}
+      type: ImageChange
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    labels:
+      app: ${APP_NAME}
+    name: ${APP_NAME}
+  spec:
+    replicas: 1
+    selector:
+      name: ${APP_NAME}
+    strategy:
+      type: Recreate
+    template:
+      metadata:
+        labels:
+          app: ${APP_NAME}
+          name: ${APP_NAME}
+      spec:
+        initContainers:
+        - name: init-sysctl
+          image: busybox
+          imagePullPolicy: IfNotPresent
+          command: ["sysctl", "-w", "vm.max_map_count=262144"]
+          securityContext:
+            privileged: true
+        containers:
+        - env:
+          - name: "CLUSTER_NAME"
+            value: "clustery_mcclusterface"
+          - name: "NUMBER_OF_MASTERS"
+            value: "2"
+          - name: NODE_MASTER
+            value: "true"
+          - name: NODE_DATA
+            value: "false"
+          - name: HTTP_ENABLE
+            value: "false"
+          - name: ES_HEAP_SIZE
+            value: "256m"
+          - name: "DISCOVERY_SERVICE"
+            value: "${APP_NAME}-discovery"
+          image: ''
+          imagePullPolicy: IfNotPresent
+          name: ${APP_NAME}
+          ports:
+          - containerPort: 9300
+            protocol: TCP
+          - containerPort: 9200
+            protocol: TCP
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - ${APP_NAME}
+        from:
+          kind: ImageStreamTag
+          name: ${APP_NAME}:latest
+      type: ImageChange
+- apiVersion: v1
+  kind: Service
+  metadata:
+    labels:
+      app: ${APP_NAME}
+    name: ${APP_NAME}
+  spec:
+    ports:
+    - name: ${APP_NAME}-9300
+      port: 9300
+      protocol: TCP
+      targetPort: 9300
+    - name: ${APP_NAME}-9200
+      port: 9200
+      protocol: TCP
+      targetPort: 9200
+    selector:
+      name: ${APP_NAME}
+    sessionAffinity: None
+    type: ClusterIP

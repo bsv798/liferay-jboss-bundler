@@ -1,0 +1,306 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: liferay-on-wildfly
+parameters:
+- name: APP_NAME
+  required: true
+  value: liferay
+
+- name: APPSERVER_TYPE
+  value: wildfly
+- name: APPSERVER_VERSION
+  value: 13.0.0.Final
+- name: APPSERVER_DOWNLOAD_URL
+  value: http://download.jboss.org/wildfly/13.0.0.Final/wildfly-13.0.0.Final.zip
+- name: LIFERAY_PREFIX
+  value: liferay-ce-portal
+- name: LIFERAY_FULL_VERSION
+  value: 7.1.0-ga1-20180703012531655
+- name: LIFERAY_BASE_URL
+  value: https://sourceforge.net/projects/lportal/files/Liferay%20Portal/7.1.0%20GA1
+- name: LIFERAY_MIN_MEMORY
+  value: 2048M
+- name: LIFERAY_MAX_MEMORY
+  value: 4096M
+- name: LIFERAY_MIN_METASPACE
+  value: 384M
+- name: LIFERAY_MAX_METASPACE
+  value: 768M
+
+- name: LIFERAY_HOME
+  value: /home/jboss/liferay
+- name: APPSERVER_HOME_PATH
+  value: /home/jboss/wildfly
+- name: LIFERAY_TURN_OFF_LOGGING
+  value: "true"
+- name: APPSERVER_TURN_OFF_LOGGING
+  value: "true"
+
+- name: JDBC_DRIVER_DOWNLOAD_URL
+  value: https://jdbc.postgresql.org/download/postgresql-42.2.4.jar
+- name: JDBC_DRIVER_CLASSNAME
+  value: org.postgresql.Driver
+- name: JDBC_DRIVER_CONNECTION_URL
+  value: jdbc:postgresql:ddd
+- name: JDBC_DRIVER_USERNAME
+  value: postgres
+- name: JDBC_DRIVER_PASSWORD
+  value: postgres
+- name: JDBC_CREDENTIAL_STORE_PASSWORD
+  value: cs_pass
+
+- name: ELASTIC_TRANSPORT_ADDRESSES
+  value: elasticsearch:9300
+- name: ELASTIC_CLUSTER_NAME
+  value: clustery_mcclusterface
+
+- name: LIFERAY_SOURCE_REPO
+  value: https://github.com/bsv798/liferay-jboss-bundler
+- name: LIFERAY_SOURCE_REF
+  value: bbb
+- name: LIFERAY_SOURCE_CONTEXT_DIR
+  value: /
+
+objects:
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    labels:
+      app: ${APP_NAME}
+    name: ${APP_NAME}
+  spec:
+    lookupPolicy:
+      local: false
+    tags:
+    - from:
+        kind: DockerImage
+        name: ${APP_NAME}:latest
+      name: latest
+
+
+- apiVersion: v1
+  kind: BuildConfig
+  metadata:
+    labels:
+      app: ${APP_NAME}
+    name: ${APP_NAME}
+  spec:
+    output:
+      to:
+        kind: ImageStreamTag
+        name: ${APP_NAME}:latest
+    source:
+      contextDir: ${LIFERAY_SOURCE_CONTEXT_DIR}
+      git:
+        ref: ${LIFERAY_SOURCE_REF}
+        uri: ${LIFERAY_SOURCE_REPO}
+      type: Git
+    strategy:
+      sourceStrategy:
+        env:
+        - name: APPSERVER_TYPE
+          value: ${APPSERVER_TYPE}
+        - name: APPSERVER_VERSION
+          value: ${APPSERVER_VERSION}
+        - name: APPSERVER_DOWNLOAD_URL
+          value: ${APPSERVER_DOWNLOAD_URL}
+        - name: LIFERAY_PREFIX
+          value: ${LIFERAY_PREFIX}
+        - name: LIFERAY_FULL_VERSION
+          value: ${LIFERAY_FULL_VERSION}
+        - name: LIFERAY_BASE_URL
+          value: ${LIFERAY_BASE_URL}
+        - name: LIFERAY_MIN_MEMORY
+          value: ${LIFERAY_MIN_MEMORY}
+        - name: LIFERAY_MAX_MEMORY
+          value: ${LIFERAY_MAX_MEMORY}
+        - name: LIFERAY_MIN_METASPACE
+          value: ${LIFERAY_MIN_METASPACE}
+        - name: LIFERAY_MAX_METASPACE
+          value: ${LIFERAY_MAX_METASPACE}
+
+        - name: LIFERAY_HOME
+          value: ${LIFERAY_HOME}
+        - name: APPSERVER_HOME_PATH
+          value: ${APPSERVER_HOME_PATH}
+        - name: LIFERAY_TURN_OFF_LOGGING
+          value: ${LIFERAY_TURN_OFF_LOGGING}
+        - name: APPSERVER_TURN_OFF_LOGGING
+          value: ${APPSERVER_TURN_OFF_LOGGING}
+
+        - name: JDBC_DRIVER_DOWNLOAD_URL
+          value: ${JDBC_DRIVER_DOWNLOAD_URL}
+        - name: JDBC_DRIVER_CLASSNAME
+          value: ${JDBC_DRIVER_CLASSNAME}
+        - name: JDBC_DRIVER_CONNECTION_URL
+          value: ${JDBC_DRIVER_CONNECTION_URL}
+        - name: JDBC_DRIVER_USERNAME
+          value: ${JDBC_DRIVER_USERNAME}
+        - name: JDBC_DRIVER_PASSWORD
+          value: ${JDBC_DRIVER_PASSWORD}
+        - name: JDBC_CREDENTIAL_STORE_PASSWORD
+          value: ${JDBC_CREDENTIAL_STORE_PASSWORD}
+        from:
+          kind: ImageStreamTag
+          name: openjdk18-openshift:latest
+          namespace: openshift
+      type: source
+    triggers:
+    - type: ConfigChange
+    - imageChange: {}
+      type: ImageChange
+
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    labels:
+      app: ${APP_NAME}
+    name: ${APP_NAME}
+  spec:
+    replicas: 1
+    selector:
+      app: ${APP_NAME}
+      deploymentconfig: ${APP_NAME}
+      liferay: ""
+    strategy:
+      activeDeadlineSeconds: 21600
+      rollingParams:
+        intervalSeconds: 1
+        maxSurge: 25%
+        maxUnavailable: 25%
+        timeoutSeconds: 600
+        updatePeriodSeconds: 1
+      type: Rolling
+    template:
+      metadata:
+        labels:
+          app: ${APP_NAME}
+          deploymentconfig: ${APP_NAME}
+          liferay: ""
+      spec:
+        containers:
+        - env:
+          - name: APPSERVER_TYPE
+            value: ${APPSERVER_TYPE}
+          - name: APPSERVER_VERSION
+            value: ${APPSERVER_VERSION}
+          - name: APPSERVER_DOWNLOAD_URL
+            value: ${APPSERVER_DOWNLOAD_URL}
+          - name: LIFERAY_PREFIX
+            value: ${LIFERAY_PREFIX}
+          - name: LIFERAY_FULL_VERSION
+            value: ${LIFERAY_FULL_VERSION}
+          - name: LIFERAY_BASE_URL
+            value: ${LIFERAY_BASE_URL}
+          - name: LIFERAY_MIN_MEMORY
+            value: ${LIFERAY_MIN_MEMORY}
+          - name: LIFERAY_MAX_MEMORY
+            value: ${LIFERAY_MAX_MEMORY}
+          - name: LIFERAY_MIN_METASPACE
+            value: ${LIFERAY_MIN_METASPACE}
+          - name: LIFERAY_MAX_METASPACE
+            value: ${LIFERAY_MAX_METASPACE}
+
+          - name: LIFERAY_HOME
+            value: ${LIFERAY_HOME}
+          - name: APPSERVER_HOME_PATH
+            value: ${APPSERVER_HOME_PATH}
+          - name: LIFERAY_TURN_OFF_LOGGING
+            value: ${LIFERAY_TURN_OFF_LOGGING}
+          - name: APPSERVER_TURN_OFF_LOGGING
+            value: ${APPSERVER_TURN_OFF_LOGGING}
+          - name: LAUNCH_JBOSS_IN_BACKGROUND
+            value: "true"
+
+          - name: JDBC_DRIVER_DOWNLOAD_URL
+            value: ${JDBC_DRIVER_DOWNLOAD_URL}
+          - name: JDBC_DRIVER_CLASSNAME
+            value: ${JDBC_DRIVER_CLASSNAME}
+          - name: JDBC_DRIVER_CONNECTION_URL
+            value: ${JDBC_DRIVER_CONNECTION_URL}
+          - name: JDBC_DRIVER_USERNAME
+            value: ${JDBC_DRIVER_USERNAME}
+          - name: JDBC_DRIVER_PASSWORD
+            value: ${JDBC_DRIVER_PASSWORD}
+          - name: JDBC_CREDENTIAL_STORE_PASSWORD
+            value: ${JDBC_CREDENTIAL_STORE_PASSWORD}
+          image: ' '
+          imagePullPolicy: Always
+          name: ${APP_NAME}
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          readinessProbe:
+            exec:
+              command:
+                - /home/jboss/bundler/check.sh
+            failureThreshold: 5
+            initialDelaySeconds: 300
+            periodSeconds: 60
+            successThreshold: 1
+            timeoutSeconds: 10
+          livenessProbe:
+            exec:
+              command:
+                - /home/jboss/bundler/check.sh
+            failureThreshold: 5
+            initialDelaySeconds: 60
+            periodSeconds: 60
+            successThreshold: 1
+            timeoutSeconds: 10
+          resources:
+            requests:
+              cpu: 1
+              memory: ${LIFERAY_MIN_MEMORY}i
+            limits:
+              cpu: 4
+              memory: ${LIFERAY_MAX_MEMORY}i
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        terminationGracePeriodSeconds: 60
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - ${APP_NAME}
+        from:
+          kind: ImageStreamTag
+          name: ${APP_NAME}:latest
+      type: ImageChange
+
+- apiVersion: v1
+  kind: Service
+  metadata:
+    labels:
+      app: ${APP_NAME}
+    name: ${APP_NAME}
+  spec:
+    ports:
+    - name: 8080-tcp
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      app: ${APP_NAME}
+      deploymentconfig: ${APP_NAME}
+      liferay: ""
+    sessionAffinity: None
+    type: ClusterIP
+
+- apiVersion: v1
+  kind: Route
+  metadata:
+    annotations:
+      haproxy.router.openshift.io/timeout: 300s
+    labels:
+      app: ${APP_NAME}
+    name: ${APP_NAME}
+  spec:
+    port:
+      targetPort: 8080-tcp
+    to:
+      kind: Service
+      name: ${APP_NAME}
+      weight: 100
