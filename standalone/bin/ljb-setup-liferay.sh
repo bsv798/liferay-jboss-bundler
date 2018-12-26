@@ -38,6 +38,7 @@ setup_app_server() {
 	append_to_cli "/subsystem=logging:write-attribute(name=add-logging-api-dependencies, value=false)"
 	append_to_cli "/subsystem=logging:write-attribute(name=use-deployment-logging-config, value=false)"
 	append_to_cli "/subsystem=logging/logger=com.google.javascript:add(level=ERROR)"
+	append_to_cli "/subsystem=logging/logger=osgi.logging.org_apache_felix_scr:add(level=ERROR)"
 
 	append_to_cli "/system-property=org.apache.catalina.connector.URI_ENCODING:add(value=UTF-8)"
 	append_to_cli "/system-property=org.apache.catalina.connector.USE_BODY_ENCODING_FOR_QUERY_STRING:add(value=true)"
