@@ -3,7 +3,23 @@
 . "$SCRIPT_DIR/bin/ljb-setup-conf.sh"
 
 setup_app_server() {
-	execute_cli
+	execute_cli "$APPSERVER_SETUP_CLI_PATH" "true"
+}
+
+setup_app_server_additional() {
+	local FINISH_PHASE="$1"
+	local ADDITIONAL_CLI_PATH=
+
+	case $FINISH_PHASE in
+		build )
+			ADDITIONAL_CLI_PATH="$APPSERVER_AFTER_BUILD_CLI_PATH"
+			;;
+		prepare )
+			ADDITIONAL_CLI_PATH="$APPSERVER_AFTER_PREPARE_CLI_PATH"
+			;;
+	esac
+
+	execute_cli "$ADDITIONAL_CLI_PATH" "false"
 }
 
 clean_temporary_resources() {
@@ -12,6 +28,7 @@ clean_temporary_resources() {
 }
 
 setup_app_server
+setup_app_server_additional "$1"
 
 echo "Clean temporary resources"
 
