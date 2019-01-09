@@ -10,8 +10,11 @@ EOF
 }
 
 copy_files() {
-	mkdir -p "$LIFERAY_HOME/osgi/portal"
-	cp "$LIFERAY_COPY_CLUSTER_PATH"/* "$LIFERAY_HOME/osgi/portal"
+	if [ -d "$LIFERAY_COPY_CLUSTER_PATH" ]
+	then
+		mkdir -p "$LIFERAY_HOME/osgi/portal"
+		cp "$LIFERAY_COPY_CLUSTER_PATH"/* "$LIFERAY_HOME/osgi/portal"
+	fi
 }
 
 if [ "x$LIFERAY_COPY_CLUSTER_PATH" != "x" ]
