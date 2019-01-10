@@ -22,6 +22,13 @@ extract_files() {
 	touch "$APPSERVER_DEPLOYMENTS_PATH/ROOT.war.dodeploy"
 }
 
+copy_additional_dependencies() {
+	if [ "x$LIFERAY_ADDITIONAL_DEPENDENCIES_PATH" != "x" ]
+	then
+		cp "${LIFERAY_ADDITIONAL_DEPENDENCIES_PATH}"/* "$LIFERAY_HOME/dependencies"
+	fi
+}
+
 setup_app_server() {
 	local DEP_PATH="`echo "$LIFERAY_HOME/dependencies" | sed "s/\ /\\\\\ /g"`"
 	local FILES="`ls "$LIFERAY_HOME/dependencies" 2> /dev/null`"
@@ -141,6 +148,7 @@ then
 	then
 		download_files
 		extract_files
+		copy_additional_dependencies
 	fi
 	setup_app_server
 	setup_portal_properties
