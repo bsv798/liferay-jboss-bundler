@@ -5,7 +5,7 @@
 setup_app_server() {
 	append_to_cli "/subsystem=elytron/credential-store=jdbc_credential_store:add-alias(alias=\"$JDBC_DRIVER_NAME\", secret-value=\"$JDBC_DRIVER_PASSWORD\")"
 
-	append_to_cli "data-source add --name=\"ds_$JDBC_DRIVER_NAME\" --jndi-name=\"java:/datasources/ds_$JDBC_DRIVER_NAME\" --driver-name=\"$JDBC_DRIVER_NAME\" --driver-class=$JDBC_DRIVER_CLASSNAME --connection-url=\"$JDBC_DRIVER_CONNECTION_URL\" --user-name=\"$JDBC_DRIVER_USERNAME\" --credential-reference={store=jdbc_credential_store, alias=\"$JDBC_DRIVER_NAME\"}"
+	append_to_cli "data-source add --name=\"ds_$JDBC_DRIVER_NAME\" --jndi-name=\"java:/datasources/ds_$JDBC_DRIVER_NAME\" --driver-name=\"$JDBC_DRIVER_NAME\" --driver-class=$JDBC_DRIVER_CLASSNAME --connection-url=\"$JDBC_DRIVER_CONNECTION_URL\" --user-name=\"$JDBC_DRIVER_USERNAME\" --credential-reference={store=jdbc_credential_store, alias=\"$JDBC_DRIVER_NAME\"} --allocation-retry=500 --allocation-retry-wait-millis=5000 --background-validation=true --background-validation-millis=5000 --check-valid-connection-sql=\"SELECT 1\""
 }
 
 setup_portal_properties() {
