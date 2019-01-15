@@ -110,6 +110,11 @@ EOF
 
 	mkdir -p "$LIFERAY_HOME/config"
 	touch "$LIFERAY_HOME/config/portal-ext.properties"
+
+	if [ -f "$TEMP_PATH/portal-ext.properties" ]
+	then
+		cat "$TEMP_PATH/portal-ext.properties" >> "$LIFERAY_HOME/portal-ext-bundle.properties"
+	fi
 }
 
 update_checksum() {
