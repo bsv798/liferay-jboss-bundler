@@ -42,7 +42,7 @@ setup_app_server() {
 
 	append_to_cli "module add --name=com.liferay.portal --resource-delimiter=, --resources=$FILE_STRING --dependencies=javax.api,javax.mail.api,javax.servlet.api,javax.servlet.jsp.api,javax.transaction.api,javax.xml.bind.api"
 
-	append_to_cli "/subsystem=logging:write-attribute(name=add-logging-api-dependencies, value=false)"
+	append_to_cli "/subsystem=logging:write-attribute(name=add-logging-api-dependencies, value=true)"
 	append_to_cli "/subsystem=logging:write-attribute(name=use-deployment-logging-config, value=false)"
 	append_to_cli "/subsystem=logging/logger=com.google.javascript:add(level=ERROR)"
 	append_to_cli "/subsystem=logging/logger=osgi.logging.org_apache_felix_scr:add(level=ERROR)"
@@ -133,15 +133,28 @@ update_checksum() {
 turn_off_logging() {
 	if [ "x$LIFERAY_TURN_OFF_LOGGING" = "xtrue" ]
 	then
-		local EXTRACT_PATH="$APPSERVER_DEPLOYMENTS_PATH/ROOT.war/WEB-INF/classes/META-INF"
+		local PORTAL_IMPL_JAR="$APPSERVER_DEPLOYMENTS_PATH/ROOT.war/WEB-INF/lib/portal-impl.jar"
+		local EXTRACT_PATH="$APPSERVER_DEPLOYMENTS_PATH/ROOT.war/WEB-INF"
 		local SOURCE_FILE="portal-log4j.xml"
-		local DESTINATION_FILE="portal-log4j-ext.xml"
+		local LOG_ENTRIES
 
-		unzip -q -j "$APPSERVER_DEPLOYMENTS_PATH/ROOT.war/WEB-INF/lib/portal-impl.jar" "META-INF/$SOURCE_FILE" -d "$EXTRACT_PATH"
-		mv "$EXTRACT_PATH/$SOURCE_FILE" "$EXTRACT_PATH/$DESTINATION_FILE"
+		unzip -q -j "$PORTAL_IMPL_JAR" "META-INF/$SOURCE_FILE" -d "$EXTRACT_PATH"
 
-		sed -i "s,.*<appender-ref ref=\"XML_FILE\" />,," "$EXTRACT_PATH/$DESTINATION_FILE"
-		sed -i "s,.*<appender-ref ref=\"TEXT_FILE\" />,," "$EXTRACT_PATH/$DESTINATION_FILE"
+		LOG_ENTRIES=`xmlstarlet fo -D "$EXTRACT_PATH/$SOURCE_FILE" | xmlstarlet sel -t -m "/log4j:configuration/category" -v "concat('/subsystem=logging/logger=',@name,':add(level=',normalize-space(priority/@value),')')" -n`
+		for LOG_ENTRY in $LOG_ENTRIES
+		do
+			append_to_cli "$LOG_ENTRY"
+		done
+		append_to_cli "/subsystem=logging/pattern-formatter=COLOR-PATTERN:write-attribute(name=pattern, value=%d{yyyy-MM-dd HH:mm:ss.SSS}  %-5p [%t][%c:%L] %m%n)"
+		append_to_cli "/subsystem=logging/console-handler=JUST-PRINT:add(formatter=%m%n)"
+		append_to_cli "/subsystem=logging/logger=stderr:add(use-parent-handlers=false, handlers=[JUST-PRINT])"
+		append_to_cli "/subsystem=logging/logger=stdout:add(use-parent-handlers=false, handlers=[JUST-PRINT])"
+
+		rm "$EXTRACT_PATH/$SOURCE_FILE"
+		zip -q -d "$PORTAL_IMPL_JAR" "META-INF/$SOURCE_FILE"
+
+		xmlstarlet ed -L -N x="urn:jboss:deployment-structure:1.1" -d "/x:jboss-deployment-structure/x:deployment/x:exclusions/x:module[@name='org.apache.log4j']" "$EXTRACT_PATH/jboss-deployment-structure.xml"
+		xmlstarlet ed -L -N x="urn:jboss:deployment-structure:1.1" -d "/x:jboss-deployment-structure/x:deployment/x:exclusions/x:module[@name='org.slf4j']" "$EXTRACT_PATH/jboss-deployment-structure.xml"
 	fi
 }
 
