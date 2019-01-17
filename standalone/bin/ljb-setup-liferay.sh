@@ -23,7 +23,7 @@ extract_files() {
 }
 
 copy_additional_dependencies() {
-	if [ "x$LIFERAY_ADDITIONAL_DEPENDENCIES_PATH" != "x" ]
+	if [ "x$LIFERAY_ADDITIONAL_DEPENDENCIES_PATH" != "x" ] && [ -d "$LIFERAY_ADDITIONAL_DEPENDENCIES_PATH" ] && [ "`ls -1q \"$LIFERAY_ADDITIONAL_DEPENDENCIES_PATH\" | wc -l`" -gt "0" ]
 	then
 		cp "${LIFERAY_ADDITIONAL_DEPENDENCIES_PATH}"/* "$LIFERAY_HOME/dependencies"
 	fi
