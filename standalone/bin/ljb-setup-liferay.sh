@@ -158,6 +158,17 @@ turn_off_logging() {
 	fi
 }
 
+setup_libre_office() {
+	if [ "x$LIBREOFFICE_SERVER_HOST" != "x" ] && [ "x$LIBREOFFICE_SERVER_PORT" != "x" ]
+	then
+		cat > "$LIFERAY_HOME/osgi/configs/com.liferay.document.library.document.conversion.internal.configuration.OpenOfficeConfiguration.config" << EOF
+serverEnabled="true"
+serverHost="$LIBREOFFICE_SERVER_HOST"
+serverPort="$LIBREOFFICE_SERVER_PORT"
+EOF
+	fi
+}
+
 if [ "x$LIFERAY_PREFIX" != "x" ] && [ "x$LIFERAY_FULL_VERSION" != "x" ]
 then
 	echo "Setup Liferay"
@@ -172,4 +183,5 @@ then
 	setup_portal_properties
 	update_checksum
 	turn_off_logging
+	setup_libre_office
 fi
