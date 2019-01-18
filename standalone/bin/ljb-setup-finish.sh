@@ -25,6 +25,7 @@ setup_app_server_additional() {
 clean_temporary_resources() {
 	rm -rf "$LIFERAY_HOME/dependencies" > /dev/null 2>&1
 	rm -f "$APPSERVER_SETUP_CLI_PATH" > /dev/null 2>&1
+	rm -rf "$APPSERVER_HOME_PATH/standalone/configuration/standalone_xml_history" > /dev/null 2>&1
 }
 
 setup_app_server
