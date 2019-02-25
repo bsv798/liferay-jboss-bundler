@@ -130,6 +130,13 @@ update_checksum() {
 	done
 }
 
+copy_osgi() {
+	if [ "x$LIFERAY_COPY_OSGI_PATH" != "x" ]
+	then
+		cp -r "$LIFERAY_COPY_OSGI_PATH"/* "$LIFERAY_OSGI_PATH"
+	fi
+}
+
 turn_off_logging() {
 	if [ "x$LIFERAY_TURN_OFF_LOGGING" = "xtrue" ]
 	then
@@ -182,6 +189,7 @@ then
 	setup_app_server
 	setup_portal_properties
 	update_checksum
+	copy_osgi
 	turn_off_logging
 	setup_libre_office
 fi
