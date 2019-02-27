@@ -44,6 +44,7 @@ setup_app_server() {
 
 	append_to_cli "/subsystem=logging:write-attribute(name=add-logging-api-dependencies, value=true)"
 	append_to_cli "/subsystem=logging:write-attribute(name=use-deployment-logging-config, value=false)"
+	append_to_cli "/subsystem=logging/console-handler=CONSOLE:write-attribute(name=level, value=ALL)"
 	append_to_cli "/subsystem=logging/logger=com.google.javascript:add(level=ERROR)"
 	append_to_cli "/subsystem=logging/logger=osgi.logging.org_apache_felix_scr:add(level=ERROR)"
 
